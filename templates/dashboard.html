@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - QuickCred{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Welcome Section -->
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Welcome back, <span id="welcome-name">User</span>!</h1>
+                <p class="text-gray-600">Manage your <span id="welcome-role">loans and investments</span> from your dashboard</p>
+            </div>
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                <button onclick="switchToBorrower()" class="w-full sm:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition duration-200 text-sm" id="borrower-btn">
+                    Borrower View
+                </button>
+                <button onclick="switchToLender()" class="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200 text-sm" id="lender-btn">
+                    Lender View
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="text-center py-8">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        <p class="mt-2 text-gray-600">Loading dashboard...</p>
+    </div>
+
+    <!-- Error Banner (hidden by default) -->
+    <div id="dashboard-error" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+            <div class="flex items-start justify-between">
+                <p id="dashboard-error-message" class="text-red-700 text-sm">An error occurred while loading the dashboard.</p>
+                <div class="ml-4">
+                    <button id="dashboard-retry-btn" onclick="retryDashboard()" class="px-3 py-1 bg-red-600 text-white rounded text-sm">Retry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Borrower Dashboard -->
+    <div id="borrower-dashboard" class="hidden">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Wallet Balance</p>
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900" id="borrower-wallet">₹0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-100 rounded-full">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Pending Loans</p>
+                        <p class="text-2xl font-bold text-gray-900" id="borrower-pending">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-100 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Active Loans</p>
+                        <p class="text-2xl font-bold text-gray-900" id="borrower-funded">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Repaid Loans</p>
+                        <p class="text-2xl font-bold text-gray-900" id="borrower-repaid">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loan Application Form -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Apply for a Loan</h2>
+            <form id="loanForm" class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount (₹)</label>
+                    <input type="number" id="loanAmount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="500-50000" min="500" max="50000" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Term (months)</label>
+                    <select id="loanTerm" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                        <option value="1">1 month</option>
+                        <option value="3">3 months</option>
+                        <option value="6" selected>6 months</option>
+                        <option value="12">12 months</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Purpose</label>
+                    <input type="text" id="loanPurpose" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="What do you need the loan for?" required>
+                </div>
+                <div class="md:col-span-2">
+                    <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-200">
+                        Apply for Loan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- My Loans -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">My Loans</h2>
+            <div id="borrower-loans" class="space-y-4">
+                <!-- Loans will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Lender Dashboard -->
+    <div id="lender-dashboard" class="hidden">
+        <!-- Stats Cards -->
+        <div class="grid lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-100 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Wallet Balance</p>
+                        <p class="text-2xl font-bold text-gray-900" id="lender-wallet">₹0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Returns</p>
+                        <p class="text-2xl font-bold text-gray-900" id="lender-returns">₹0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Active Investments</p>
+                        <p class="text-2xl font-bold text-gray-900" id="lender-active">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-orange-100 rounded-full">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Invested</p>
+                        <p class="text-2xl font-bold text-gray-900" id="lender-invested">₹0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Loans to Fund -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Available Loans to Fund</h2>
+            <div id="available-loans" class="space-y-4">
+                <!-- Available loans will be loaded here -->
+            </div>
+        </div>
+
+        <!-- My Investments -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">My Investments</h2>
+            <div id="lender-loans" class="space-y-4">
+                <!-- Investments will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// `currentUser` is declared in `static/js/app.js`; avoid redeclaring it here to prevent JS errors
+let currentRole = null;
+let borrowerData = null;
+let lenderData = null;
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        // Check authentication
+        const response = await fetchWithTimeout('/auth/profile', {}, 8000);
+        if (!response.ok) {
+            window.location.href = '/';
+            return;
+        }
+
+        const data = await response.json();
+        currentUser = data.user;
+        updateAuthUI();
+
+        // Load dashboard based on user role
+        if (currentUser.role === 'borrower') {
+            await loadBorrowerDashboard();
+        } else if (currentUser.role === 'lender') {
+            await loadLenderDashboard();
+        } else {
+            // Fallback: show borrower dashboard by default
+            await loadBorrowerDashboard();
+        }
+
+    // Hide loading state
+    document.getElementById('loading-state').classList.add('hidden');
+
+    // Hide any previous error
+    document.getElementById('dashboard-error').classList.add('hidden');
+
+    } catch (error) {
+        console.error('Dashboard initialization failed:', error);
+        showDashboardError('Failed to initialize dashboard: ' + (error.message || error));
+    }
+});
+
+function showDashboardError(message) {
+    const banner = document.getElementById('dashboard-error');
+    const msg = document.getElementById('dashboard-error-message');
+    msg.textContent = message;
+    banner.classList.remove('hidden');
+    // hide spinner
+    const loading = document.getElementById('loading-state');
+    if (loading) loading.classList.add('hidden');
+}
+
+function retryDashboard() {
+    // simple retry: reload the page which re-triggers init
+    location.reload();
+}
+
+// `updateAuthUI` is implemented in `static/js/app.js`; we rely on that implementation here.
+
+async function loadBorrowerDashboard() {
+    try {
+        console.log('Loading borrower dashboard...');
+    const response = await fetchWithTimeout('/dashboard/borrower-data', {}, 8000);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('API Error:', errorData);
+            throw new Error(`API Error: ${errorData.error || 'Unknown error'}`);
+        }
+
+        borrowerData = await response.json();
+        console.log('Borrower data loaded:', borrowerData);
+        currentRole = 'borrower';
+
+        // Update UI
+        document.getElementById('borrower-dashboard').classList.remove('hidden');
+        document.getElementById('lender-dashboard').classList.add('hidden');
+
+        // Update stats
+        document.getElementById('borrower-wallet').textContent = `₹${borrowerData.analytics.wallet_balance}`;
+        document.getElementById('borrower-pending').textContent = borrowerData.analytics.pending_loans;
+        document.getElementById('borrower-funded').textContent = borrowerData.analytics.funded_loans;
+        document.getElementById('borrower-repaid').textContent = borrowerData.analytics.repaid_loans;
+
+        // Display loans
+        displayBorrowerLoans(borrowerData.loans);
+
+    } catch (error) {
+        console.error('Error loading borrower dashboard:', error);
+        showDashboardError('Failed to load borrower data: ' + (error.message || error));
+    }
+}
+
+async function loadLenderDashboard() {
+    try {
+        console.log('Loading lender dashboard...');
+    const response = await fetchWithTimeout('/dashboard/lender-data', {}, 8000);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('API Error:', errorData);
+            throw new Error(`API Error: ${errorData.error || 'Unknown error'}`);
+        }
+
+        lenderData = await response.json();
+        console.log('Lender data loaded:', lenderData);
+        currentRole = 'lender';
+
+        // Update UI
+        document.getElementById('lender-dashboard').classList.remove('hidden');
+        document.getElementById('borrower-dashboard').classList.add('hidden');
+
+        // Update stats
+        document.getElementById('lender-wallet').textContent = `₹${lenderData.analytics.wallet_balance}`;
+        document.getElementById('lender-returns').textContent = `₹${lenderData.analytics.total_returns}`;
+        document.getElementById('lender-active').textContent = lenderData.analytics.active_loans;
+        document.getElementById('lender-invested').textContent = `₹${lenderData.analytics.total_invested}`;
+
+        // Display data
+        displayAvailableLoans(lenderData.available_loans);
+        displayLenderLoans(lenderData.my_loans);
+
+    } catch (error) {
+        console.error('Error loading lender dashboard:', error);
+        showDashboardError('Failed to load lender data: ' + (error.message || error));
+    }
+}
+
+function switchToBorrower() {
+    if (currentRole !== 'borrower') {
+        loadBorrowerDashboard();
+    }
+}
+
+function switchToLender() {
+    if (currentRole !== 'lender') {
+        loadLenderDashboard();
+    }
+}
+
+function displayBorrowerLoans(loans) {
+    const container = document.getElementById('borrower-loans');
+    container.innerHTML = '';
+
+    if (loans.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">No loans yet</p>';
+        return;
+    }
+
+    loans.forEach(loan => {
+        const statusColors = {
+            'pending': 'bg-yellow-100 text-yellow-800',
+            'funded': 'bg-blue-100 text-blue-800',
+            'repaid': 'bg-green-100 text-green-800'
+        };
+
+        const loanCard = document.createElement('div');
+        loanCard.className = 'p-4 border border-gray-200 rounded-lg';
+        loanCard.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <span class="font-semibold">₹${loan.amount.toLocaleString()}</span>
+                <span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[loan.status]}">
+                    ${loan.status.charAt(0).toUpperCase() + loan.status.slice(1)}
+                </span>
+            </div>
+            <div class="text-sm text-gray-600">
+                <div>Term: ${loan.term_months} months</div>
+                <div>Purpose: ${loan.purpose}</div>
+                ${loan.total_interest ? `<div>Total Amount: ₹${loan.total_amount.toFixed(2)}</div>` : ''}
+            </div>
+            ${loan.status === 'funded' ? `
+                <div class="mt-3">
+                    <button onclick="repayLoan('${loan.id}')" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200">
+                        Repay Loan
+                    </button>
+                </div>
+            ` : ''}
+        `;
+        container.appendChild(loanCard);
+    });
+}
+
+function displayAvailableLoans(loans) {
+    const container = document.getElementById('available-loans');
+    container.innerHTML = '';
+
+    if (loans.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">No loans available to fund</p>';
+        return;
+    }
+
+    loans.forEach(loan => {
+        const loanCard = document.createElement('div');
+        loanCard.className = 'p-4 border border-gray-200 rounded-lg';
+        loanCard.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <span class="font-semibold">₹${loan.amount.toLocaleString()}</span>
+                <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    Pending
+                </span>
+            </div>
+            <div class="text-sm text-gray-600 mb-3">
+                <div>Borrower: ${loan.borrower_name}</div>
+                <div>Term: ${loan.term_months} months</div>
+                <div>Purpose: ${loan.purpose}</div>
+                <div>Interest Rate: ${(loan.interest_rate * 100).toFixed(1)}%</div>
+            </div>
+            <button onclick="fundLoan('${loan.id}')" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                Fund This Loan
+            </button>
+        `;
+        container.appendChild(loanCard);
+    });
+}
+
+function displayLenderLoans(loans) {
+    const container = document.getElementById('lender-loans');
+    container.innerHTML = '';
+
+    if (loans.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">No investments yet</p>';
+        return;
+    }
+
+    loans.forEach(loan => {
+        const statusColors = {
+            'pending': 'bg-yellow-100 text-yellow-800',
+            'funded': 'bg-blue-100 text-blue-800',
+            'repaid': 'bg-green-100 text-green-800'
+        };
+
+        const loanCard = document.createElement('div');
+        loanCard.className = 'p-4 border border-gray-200 rounded-lg';
+        loanCard.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <span class="font-semibold">₹${loan.amount.toLocaleString()}</span>
+                <span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[loan.status]}">
+                    ${loan.status.charAt(0).toUpperCase() + loan.status.slice(1)}
+                </span>
+            </div>
+            <div class="text-sm text-gray-600">
+                <div>Term: ${loan.term_months} months</div>
+                <div>Return Rate: ${(loan.lender_return_rate * 100).toFixed(1)}%</div>
+                ${loan.lender_return ? `<div>Expected Return: ₹${loan.lender_return.toFixed(2)}</div>` : ''}
+            </div>
+        `;
+        container.appendChild(loanCard);
+    });
+}
+
+// Loan form submission
+document.getElementById('loanForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = {
+        amount: parseInt(document.getElementById('loanAmount').value),
+        term_months: parseInt(document.getElementById('loanTerm').value),
+        purpose: document.getElementById('loanPurpose').value
+    };
+
+    try {
+        const response = await apiCall('/loan/create', {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        });
+
+        if (!response) throw new Error('No response from server');
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('Loan application submitted successfully!');
+            document.getElementById('loanForm').reset();
+            loadBorrowerDashboard(); // Refresh data
+        } else {
+            alert('Error: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error creating loan:', error);
+        alert('Error creating loan');
+    }
+});
+
+async function fundLoan(loanId) {
+    if (!confirm('Are you sure you want to fund this loan?')) return;
+
+    try {
+        const response = await apiCall(`/loan/fund/${loanId}`, {
+            method: 'POST'
+        });
+
+        if (!response) throw new Error('No response from server');
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('Loan funded successfully!');
+            loadLenderDashboard(); // Refresh data
+        } else {
+            alert('Error: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error funding loan:', error);
+        alert('Error funding loan');
+    }
+}
+
+async function repayLoan(loanId) {
+    if (!confirm('Are you sure you want to repay this loan?')) return;
+
+    try {
+        const response = await apiCall(`/loan/repay/${loanId}`, {
+            method: 'POST'
+        });
+
+        if (!response) throw new Error('No response from server');
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('Loan repaid successfully!');
+            loadBorrowerDashboard(); // Refresh data
+        } else {
+            alert('Error: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error repaying loan:', error);
+        alert('Error repaying loan');
+    }
+}
+</script>
+{% endblock %}

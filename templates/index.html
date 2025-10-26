@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}QuickCred - Instant Micro-Loans for Students & Young Professionals{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="gradient-bg py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                QuickCred
+            </h1>
+            <p class="text-xl md:text-2xl text-white mb-8 opacity-90">
+                Instant micro-loans for students & young professionals
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="showRegister()" class="bg-white text-purple-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-200">
+                    Get Started
+                </button>
+                <button onclick="showLogin()" class="border-2 border-white text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-white hover:text-purple-600 transition duration-200">
+                    Login
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Why Choose QuickCred?
+            </h2>
+            <p class="text-xl text-gray-600">
+                Fast, transparent, and secure micro-lending platform
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 card-hover">
+                <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Instant Approval</h3>
+                <p class="text-gray-600">Get loan approval in minutes, not days. Our AI-powered system processes applications instantly.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 card-hover">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Transparent Rates</h3>
+                <p class="text-gray-600">Clear, upfront interest rates. No hidden fees or surprises. What you see is what you pay.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-green-50 to-blue-50 card-hover">
+                <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Secure Platform</h3>
+                <p class="text-gray-600">Bank-level security with encrypted transactions and secure wallet system.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                How It Works
+            </h2>
+            <p class="text-xl text-gray-600">
+                Simple steps to get your loan or start earning returns
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- For Borrowers -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">For Borrowers</h3>
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">1</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Sign Up & Verify</h4>
+                            <p class="text-gray-600">Create your account and complete quick verification</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">2</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Apply for Loan</h4>
+                            <p class="text-gray-600">Request loan amount (₹500 - ₹50,000) with purpose</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">3</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Get Funded</h4>
+                            <p class="text-gray-600">Lenders fund your loan and money is transferred instantly</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">4</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Repay on Time</h4>
+                            <p class="text-gray-600">Repay with interest through our secure wallet system</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- For Lenders -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">For Lenders</h3>
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">1</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Sign Up as Lender</h4>
+                            <p class="text-gray-600">Create lender account and add funds to wallet</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">2</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Browse Loans</h4>
+                            <p class="text-gray-600">View pending loan requests and choose to fund</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">3</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Fund Loans</h4>
+                            <p class="text-gray-600">Fund loans and earn 2% monthly returns</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 flex-shrink-0">4</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Track Returns</h4>
+                            <p class="text-gray-600">Monitor your investments and returns in real-time</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-20 gradient-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Platform Statistics
+            </h2>
+            <p class="text-xl text-white opacity-90">
+                Real-time data from our lending platform
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white mb-2" id="totalUsers">0</div>
+                <div class="text-white opacity-90">Total Users</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white mb-2" id="totalLoans">0</div>
+                <div class="text-white opacity-90">Loans Processed</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white mb-2" id="totalAmount">₹0</div>
+                <div class="text-white opacity-90">Amount Disbursed</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white mb-2">4.7%</div>
+                <div class="text-white opacity-90">Borrower Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Ready to Get Started?
+        </h2>
+        <p class="text-xl text-gray-600 mb-8">
+            Join thousands of students and professionals who trust QuickCred for their financial needs
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="showRegister()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition duration-200">
+                Start Borrowing
+            </button>
+            <button onclick="showRegister()" class="border-2 border-purple-500 text-purple-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-500 hover:text-white transition duration-200">
+                Start Lending
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load platform statistics when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+});
+
+// Load platform statistics
+async function loadStats() {
+    try {
+        const response = await fetchWithTimeout('/transactions/platform-analytics', {}, 5000);
+        const data = await response.json();
+
+        if (data.platform_analytics) {
+            document.getElementById('totalUsers').textContent = data.platform_analytics.total_users || 0;
+            document.getElementById('totalLoans').textContent = data.platform_analytics.loan_analytics.reduce((sum, item) => sum + item.count, 0) || 0;
+            document.getElementById('totalAmount').textContent = '₹' + (data.platform_analytics.loan_analytics.reduce((sum, item) => sum + item.total_amount, 0) || 0).toLocaleString();
+        }
+    } catch (error) {
+        console.error('Error loading stats:', error);
+        // Continue silently - stats are not critical for the index page
+    }
+}
+</script>
+{% endblock %}
